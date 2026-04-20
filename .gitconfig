@@ -1,0 +1,10 @@
+[user]
+	email = contact@danilocgsilva.me
+	name = Danilo Silva
+[safe]
+	directory = /home/danilo/groceries_schedule
+	directory = /home/danilo/receiptman
+	directory = /home/danilo/receiptman/output/vuetify/app
+	directory = /home/danilo/receiptman/output/env_make_question_google_gemini/make_question_google_gemini_api/src/make-question-interface
+[credential]
+	helper = "!f() { /app/.vscode-server/bin/560a9dba96f961efea7b1612916f89e5d5d4d679/node /tmp/vscode-remote-containers-5c36834e-0a3b-4dc7-85f2-6f10592a8124.js git-credential-helper $*; }; f"

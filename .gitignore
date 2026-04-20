@@ -3,3 +3,9 @@ dist
 node_modules
 .vscode-test/
 *.vsix
+.cache/**/*
+.npm/_cacache/**/*
+.npm/_logs/**/*
+.gitignore
+.dotnet/**/*
+.vscode-server/**/*
