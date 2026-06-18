@@ -1,0 +1,21 @@
+// .devcontainer/devcontainer.json
+{
+  "name": "VS Code Extension Dev",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode"
+      ],
+      "settings": {
+        "terminal.integrated.shell.linux": "/bin/bash"
+      }
+    }
+  },
+  "postCreateCommand": "npm install",
+  "remoteUser": "node",
+  "forwardPorts": []
+}
