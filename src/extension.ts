@@ -18,7 +18,7 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(writeIntoCursorDisposable);
 
 	// Listen for config changes
-	const configurationListener = vscode.workspace.onDidChangeConfiguration((e) => {
+	const configurationListener = vscode.workspace.onDidChangeConfiguration(async (e) => {
 		if (e.affectsConfiguration('ai-connector.ai_host')) {
 			const newHost = updateConfig();
 			aiConnector.setOllamaHost(newHost);
