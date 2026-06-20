@@ -5,6 +5,8 @@ export class AiConnector {
 
   private commandIdentifier = "ai-connector.insertText";
 
+  private testOllamaServerIdentifier = "ai-connector.testOllamaServer";
+
   public setOllamaHost(ollamaHost: string) {
     this.ollamaHost = ollamaHost;
   }
@@ -32,7 +34,28 @@ export class AiConnector {
     }
   }
 
-  writeIntoCursor(): vscode.Disposable {
+  getDisposable(disposableIdentifier: string): vscode.Disposable {
+    if (disposableIdentifier === this.commandIdentifier) {
+      return this.getWriteIntoCursor();
+    }
+    if (disposableIdentifier === this.testOllamaServerIdentifier) {
+      return this.getOllamaServerTester();
+    }
+    throw Error("Not valid disposable name.");
+  }
+
+  private getOllamaServerTester(): vscode.Disposable {
+    const disposable = vscode.commands.registerCommand(
+      this.testOllamaServerIdentifier,
+      async () => {
+        !await this.testOllamaConnection();
+      }
+    );
+
+    return disposable;
+  }
+
+  private getWriteIntoCursor(): vscode.Disposable {
     const disposable = vscode.commands.registerCommand(
       this.commandIdentifier,
       async () => {

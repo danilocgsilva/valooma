@@ -16,6 +16,10 @@
       {
         "command": "ai-connector.insertText",
         "title": "AI Connector: Insert Text"
+      },
+      {
+        "command": "ai-connector.testOllamaServer",
+        "title": "AI Connector: Test AI Server"
       }
     ],
     "configuration": {
