@@ -1,9 +1,5 @@
 import * as vscode from 'vscode';
 
-function getOllamaHost(): string {
-	return 'host.docker.internal';
-}
-
 function getModel(): string {
 	return "qwen2.5-coder:latest";
 }
@@ -17,7 +13,7 @@ async function isOllamaRunning(ollamaHost: string) {
 	}
 }
 
-function writeIntoCursor(): vscode.Disposable {
+function writeIntoCursor(aiHost: string): vscode.Disposable {
 	const disposable = vscode.commands.registerCommand('ai-connector.insertText', async () => {
 		const editor = vscode.window.activeTextEditor;
 		if (!editor) {
@@ -25,9 +21,8 @@ function writeIntoCursor(): vscode.Disposable {
 			return;
 		}
 
-		const ollamaHost = getOllamaHost();
-		if (!(await isOllamaRunning(ollamaHost))) {
-			vscode.window.showErrorMessage('Ollama is not running. Please start Ollama and try again.');
+		if (!(await isOllamaRunning(aiHost))) {
+			vscode.window.showErrorMessage(`Ollama is not running in ${aiHost}. Please start Ollama and try again.`);
 			return;
 		} else {
 			vscode.window.showInformationMessage('Ollama is running. Wen can begin...');
@@ -44,9 +39,10 @@ function writeIntoCursor(): vscode.Disposable {
 }
 
 export function activate(context: vscode.ExtensionContext) {
+	const config = vscode.workspace.getConfiguration('aiConnector');
+	const aiHost = config.get<string>('ai_host') || 'localhost';
 
-	const writeIntoCursorDisposable = writeIntoCursor();
-
+	const writeIntoCursorDisposable = writeIntoCursor(aiHost);
 	context.subscriptions.push(writeIntoCursorDisposable);
 }
 

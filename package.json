@@ -17,7 +17,17 @@
         "command": "ai-connector.insertText",
         "title": "AI Connector: Insert Text"
       }
-    ]
+    ],
+    "configuration": {
+      "title": "AI Connector Host",
+      "properties": {
+        "ai-connector.ai_host": {
+          "type": "string",
+          "default": "localhost",
+          "description": "Define the host address of your Ollama like AI address"
+        }
+      }
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run package",
