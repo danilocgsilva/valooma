@@ -1,16 +1,23 @@
 import * as vscode from "vscode";
 
 export class AiConnector {
-  async isOllamaRunning(ollamaHost: string) {
+
+  private ollamaHost: string = "";
+
+  public setOllamaHost(ollamaHost: string) {
+    this.ollamaHost = ollamaHost;
+  }
+    
+  async isOllamaRunning() {
     try {
-      const res = await fetch(`http://${ollamaHost}:11434/api/tags`);
+      const res = await fetch(`http://${this.ollamaHost}:11434/api/tags`);
       return res.ok;
     } catch {
       return false;
     }
   }
 
-  writeIntoCursor(aiHost: string): vscode.Disposable {
+  writeIntoCursor(): vscode.Disposable {
     const disposable = vscode.commands.registerCommand(
       "ai-connector.insertText",
       async () => {
@@ -20,9 +27,9 @@ export class AiConnector {
           return;
         }
 
-        if (!(await this.isOllamaRunning(aiHost))) {
+        if (!(await this.isOllamaRunning())) {
           vscode.window.showErrorMessage(
-            `Ollama is not running in ${aiHost}. Please start Ollama and try again.`,
+            `Ollama is not running in ${this.ollamaHost}. Please start Ollama and try again.`,
           );
           return;
         } else {

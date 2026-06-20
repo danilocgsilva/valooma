@@ -3,12 +3,28 @@ import { AiConnector } from './AiConnector';
 
 const aiConnector = new AiConnector();
 
-export function activate(context: vscode.ExtensionContext) {
-	const config = vscode.workspace.getConfiguration('aiConnector');
+function updateConfig(): string {
+	const config = vscode.workspace.getConfiguration('ai-connector');
 	const aiHost = config.get<string>('ai_host') || 'localhost';
+	return aiHost;
+}
 
-	const writeIntoCursorDisposable = aiConnector.writeIntoCursor(aiHost);
+export function activate(context: vscode.ExtensionContext) {
+	// Initial setup
+	const initialHost = updateConfig();
+	aiConnector.setOllamaHost(initialHost);
+
+	const writeIntoCursorDisposable = aiConnector.writeIntoCursor();
 	context.subscriptions.push(writeIntoCursorDisposable);
+
+	// Listen for config changes
+	const configurationListener = vscode.workspace.onDidChangeConfiguration((e) => {
+		if (e.affectsConfiguration('ai-connector.ai_host')) {
+			const newHost = updateConfig();
+			aiConnector.setOllamaHost(newHost);
+		}
+	});
+	context.subscriptions.push(configurationListener);
 }
 
 export function deactivate() {}
