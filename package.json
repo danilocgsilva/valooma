@@ -3,7 +3,7 @@
   "displayName": "ai_connector",
   "description": "Allows the use of AI inside Visual Studio Code, including offline usage",
   "version": "0.0.1",
-  "publisher": "danilo-silva",
+  "publisher": "danilocgsilva",
   "engines": {
     "vscode": "^1.116.0"
   },

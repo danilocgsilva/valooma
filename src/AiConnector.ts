@@ -92,7 +92,7 @@ export class AiConnector {
 
   private getManageExtension(): vscode.Disposable {
     const disposable = vscode.commands.registerCommand(
-      "ai-connector.manage-extension",
+      this.manageExtensionIdentifier,
       () => {
         vscode.commands.executeCommand("workbench.view.extensions");
       },
