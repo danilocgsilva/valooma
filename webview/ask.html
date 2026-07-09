@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Extension View</title>
+    <style>
+        textarea {
+            background-color: var(--vscode-editor-background);
+            color: var(--vscode-editor-foreground);
+            width: 100%;
+            font-family: sans-serif;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>Ask</h2>
+    <form id="ask_form">
+        <textarea name="question_textarea"></textarea>
+        <input type="submit" value="ask" />
+    </form>
+    <script>
+        const vscode = acquireVsCodeApi();
+        document.getElementById('ask_form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const question = e.target.question_textarea.value;
+            vscode.postMessage({ command: 'submitForm', payload: { question } });
+        });
+    </script>
+</body>
+
+</html>

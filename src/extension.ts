@@ -9,25 +9,25 @@ function updateConfig(): string {
 	return aiHost;
 }
 
-export function activate(context: vscode.ExtensionContext) {
+export async function activate(context: vscode.ExtensionContext) {
 	// Initial setup
 	const initialHost = updateConfig();
 	aiConnector.setOllamaHost(initialHost);
 
-	const valoomaSidebar: vscode.Disposable = aiConnector.getDisposable("ai-connector.valoomaPanel", context);
+	const valoomaSidebar: vscode.Disposable = await aiConnector.getDisposable("ai-connector.valoomaPanel", context);
 	context.subscriptions.push(valoomaSidebar);
 
 	// Commands registration
-	const writeIntoCursor: vscode.Disposable = aiConnector.getDisposable("ai-connector.insertText");
+	const writeIntoCursor: vscode.Disposable = await aiConnector.getDisposable("ai-connector.insertText");
 	context.subscriptions.push(writeIntoCursor);
 
-	const testOllamaServer: vscode.Disposable = aiConnector.getDisposable("ai-connector.testOllamaServer");
+	const testOllamaServer: vscode.Disposable = await aiConnector.getDisposable("ai-connector.testOllamaServer");
 	context.subscriptions.push(testOllamaServer);
 
-	const extensionManager: vscode.Disposable = aiConnector.getDisposable("ai-connector.manageExtension");
+	const extensionManager: vscode.Disposable = await aiConnector.getDisposable("ai-connector.manageExtension");
 	context.subscriptions.push(extensionManager);
 
-	const settingsPage: vscode.Disposable = aiConnector.getDisposable("ai-connector.openSettings");
+	const settingsPage: vscode.Disposable = await aiConnector.getDisposable("ai-connector.openSettings", context);
 	context.subscriptions.push(settingsPage);
 
 	// Listen for config changes
