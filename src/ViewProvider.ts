@@ -19,19 +19,24 @@ export class ViewProvider implements vscode.WebviewViewProvider {
             if (message.command === 'submitForm') {
                 const aiHost = this.getAiHost();
                 try {
-                    const response = await fetch(`http://${aiHost}:11001/api/generate`, {
+                    const response = await fetch(`http://${aiHost}:11001/api/chat`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ model: message.payload.model, prompt: message.payload.question, stream: true })
+                        body: JSON.stringify({ model: message.payload.model, messages: [{ role: 'user', content: message.payload.question }], stream: true })
                     });
                     const reader = response.body!.getReader();
                     const decoder = new TextDecoder();
+                    let buffer = '';
                     while (true) {
                         const { done, value } = await reader.read();
                         if (done) { break; }
-                        const chunk = decoder.decode(value);
-                        const text = JSON.parse(chunk).response;
-                        webviewView.webview.postMessage({ command: 'streamChunk', text });
+                        buffer += decoder.decode(value);
+                        const lines = buffer.split('\n');
+                        buffer = lines.pop()!;
+                        for (const line of lines.filter(l => l.trim())) {
+                            const text = JSON.parse(line).message?.content;
+                            webviewView.webview.postMessage({ command: 'streamChunk', text });
+                        }
                     }
                     webviewView.webview.postMessage({ command: 'streamDone' });
                 } catch (err) {
