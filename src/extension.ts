@@ -10,14 +10,12 @@ function updateConfig(): string {
 }
 
 export async function activate(context: vscode.ExtensionContext) {
-	// Initial setup
 	const initialHost = updateConfig();
 	aiConnector.setOllamaHost(initialHost);
 
 	const valoomaSidebar: vscode.Disposable = await aiConnector.getDisposable("ai-connector.valoomaPanel", context);
 	context.subscriptions.push(valoomaSidebar);
 
-	// Commands registration
 	const writeIntoCursor: vscode.Disposable = await aiConnector.getDisposable("ai-connector.insertText");
 	context.subscriptions.push(writeIntoCursor);
 
@@ -27,10 +25,6 @@ export async function activate(context: vscode.ExtensionContext) {
 	const extensionManager: vscode.Disposable = await aiConnector.getDisposable("ai-connector.manageExtension");
 	context.subscriptions.push(extensionManager);
 
-	const settingsPage: vscode.Disposable = await aiConnector.getDisposable("ai-connector.openSettings", context);
-	context.subscriptions.push(settingsPage);
-
-	// Listen for config changes
 	const configurationListener = vscode.workspace.onDidChangeConfiguration(async (e) => {
 		if (e.affectsConfiguration('ai-connector.ai_host')) {
 			const newHost = updateConfig();

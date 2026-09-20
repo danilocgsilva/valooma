@@ -10,8 +10,6 @@ export class AiConnector {
 
   private manageExtensionIdentifier = "ai-connector.manageExtension";
 
-  private settingsPageIdentifier = "ai-connector.openSettings";
-
   private sidebar = "ai-connector.valoomaPanel";
 
   public setOllamaHost(ollamaHost: string) {
@@ -50,9 +48,6 @@ export class AiConnector {
     }
     if (disposableIdentifier === this.manageExtensionIdentifier) {
       return this.getManageExtension();
-    }
-    if (disposableIdentifier === this.settingsPageIdentifier && context !== undefined) {
-      return await this.getSettingsPage(context);
     }
     if (disposableIdentifier === this.sidebar && context !== undefined) {
       return this.getSidebar(context);
@@ -114,53 +109,6 @@ export class AiConnector {
     );
 
     return disposable;
-  }
-
-  private async getSettingsPage(context: vscode.ExtensionContext): Promise<vscode.Disposable> {
-    const disposable = vscode.commands.registerCommand(
-      this.settingsPageIdentifier,
-      async () => {
-        const panel = vscode.window.createWebviewPanel(
-          "aiConnectorSettings",
-          "AI Connector Settings",
-          vscode.ViewColumn.One,
-          {
-            enableScripts: true,
-            retainContextWhenHidden: true,
-          },
-        );
-
-        const config = vscode.workspace.getConfiguration("ai-connector");
-        const aiHost = config.get<string>("ai_host") || "localhost";
-        panel.webview.html = await this.getSettingsHtml(aiHost, panel, context.extensionUri);
-        panel.webview.onDidReceiveMessage(
-          async (message) => {
-            switch (message.command) {
-              case "updateHost":
-                await vscode.workspace
-                  .getConfiguration("ai-connector")
-                  .update("ai_host", message.host, true);
-                this.setOllamaHost(message.host);
-                vscode.window.showInformationMessage("Settings updated!");
-            }
-          },
-          undefined,
-          undefined,
-        );
-      },
-    );
-
-    return disposable;
-  }
-
-  private async getSettingsHtml(aiHost: string, panel: vscode.WebviewPanel, vscodeuri: vscode.Uri): Promise<string> {
-    const htmlPath = vscode.Uri.joinPath(vscodeuri, 'webview', 'settings.html');
-    const uint8array = await vscode.workspace.fs.readFile(htmlPath);
-    const html = new TextDecoder('utf-8').decode(uint8array);
-    const nonce: string = getNonce();
-    const updatedHtml = html
-      .replace(/{{nonce}}/g, nonce);
-    return updatedHtml;
   }
 }
 

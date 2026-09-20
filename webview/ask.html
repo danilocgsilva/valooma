@@ -4,23 +4,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Extension View</title>
+    <title>Question</title>
     <style>
+        .subtle-section {
+            padding: 5px 0;
+        }
+        input[type="submit"] {
+            background: var(--vscode-button-background);
+            color: var(--vscode-button-foreground);
+            border: 1px solid var(--vscode-button-border, transparent);
+            padding: 4px 12px;
+            font-family: var(--vscode-font-family);
+            cursor: pointer;
+        }
+        select, input[type="text"] {
+            background: var(--vscode-dropdown-background);
+            color: var(--vscode-dropdown-foreground);
+            border: 1px solid var(--vscode-dropdown-border);
+            padding: 3px 6px;
+            font-family: var(--vscode-font-family);
+        }
+        button {
+            background: var(--vscode-button-background);
+        }
         textarea {
             background-color: var(--vscode-editor-background);
             color: var(--vscode-editor-foreground);
             width: 100%;
             font-family: sans-serif;
+            resize: vertical;
         }
     </style>
 </head>
 
 <body>
-    <h2>Ask</h2>
-    <form id="ask_form">
-        <textarea name="question_textarea"></textarea>
-        <input type="submit" value="ask" />
-    </form>
+    <p>AI Host: {{aiHost}}</p>
+    <select>
+        <option value="a">Value1</option>
+        <option value="b">Value2</option>
+    </select>
+    
+    <div class="subtle-section">
+        <h2>Ask</h2>
+        <form id="ask_form">
+            <textarea name="question_textarea"></textarea>
+            <input type="submit" value="ask" />
+        </form>
+    </div>
+
+    <div class="subtle-section">
+        <label for="answer">Answer</label>
+        <textarea id="answer" readonly></textarea>
+    </div>
     <script>
         const vscode = acquireVsCodeApi();
         document.getElementById('ask_form').addEventListener('submit', (e) => {

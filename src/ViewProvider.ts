@@ -43,7 +43,9 @@ export class ViewProvider implements vscode.WebviewViewProvider {
 
         const updatedHtml = html
             .replace(/{{cspSource}}/g, webview.cspSource)
-            .replace(/{{nonce}}/g, nonce);
+            .replace(/{{nonce}}/g, nonce)
+            .replace(/{{aiHost}}/g, this.getAiHost())
+        ;
 
         return updatedHtml;
     }
