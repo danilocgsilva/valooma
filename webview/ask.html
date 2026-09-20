@@ -74,6 +74,11 @@
         });
         vscode.postMessage({ command: 'getTags' });
 
+        document.getElementById('ask_form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const question = e.target.question_textarea.value;
+            vscode.postMessage({ command: 'submitForm', payload: { question } });
+        });
     </script>
 
 </body>
