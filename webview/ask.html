@@ -40,6 +40,15 @@
             height: 150px;
             resize: vertical;
         }
+
+        #ask_submit {
+            width: 100%;
+            font-size: 120%;
+        }
+        .w50 {
+            flex: 0 0 50%;
+            min-width: 0;
+        }
     </style>
 </head>
 
@@ -51,9 +60,27 @@
         <h2>Ask</h2>
         <form id="ask_form">
             <textarea name="question_textarea"></textarea>
-            <input type="submit" value="ask" />
         </form>
     </div>
+
+    <div class="subtle-section" style="display:flex; gap:8px;">
+        <div class="w50">
+            <label for="system-prompt">System prompt</label>
+            <textarea id="system-prompt"></textarea>
+        </div>
+        <div class="w50" style="overflow:hidden;">
+            <input type="checkbox"> Disable reasoning
+            <div style="display:flex; gap:8px;">
+                <input type="text" style="flex:1; min-width:0;" id="option-name">
+                <input type="text" style="flex:1; min-width:0;" id="option-value">
+            </div>
+            <form>
+                <input type="submit" id="add-option-value-pair" value="Add Option" />
+            </form>
+        </div>
+    </div>
+
+    <input id="ask_submit" type="submit" value="ask" form="ask_form" />
 
     <div class="subtle-section">
         <label for="answer">Answer</label>
