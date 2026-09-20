@@ -37,6 +37,7 @@
             color: var(--vscode-editor-foreground);
             width: 100%;
             font-family: sans-serif;
+            height: 150px;
             resize: vertical;
         }
     </style>
@@ -57,6 +58,12 @@
     <div class="subtle-section">
         <label for="answer">Answer</label>
         <textarea id="answer" readonly></textarea>
+    </div>
+
+    <div class="subtle-section">
+        <form id="clear-form">
+            <input type="submit" value="Clear" />
+        </form>
     </div>
 
     <script>
