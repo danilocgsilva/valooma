@@ -16,18 +16,14 @@ export class ViewProvider implements vscode.WebviewViewProvider {
         webviewView.webview.html = await this.getHtmlForWebview(webviewView.webview);
 
         webviewView.webview.onDidReceiveMessage(async (message) => {
-            if (message.command === 'submitForm') {
+            if (message.command === 'getTags') {
                 const aiHost = this.getAiHost();
                 try {
-                    const response = await fetch('http://' + aiHost + "/api/tags", {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(message.payload)
-                    });
+                    const response = await fetch(`http://${aiHost}:11001/api/tags`);
                     const result = await response.json();
-                    webviewView.webview.postMessage({ command: 'formResult', result });
+                    webviewView.webview.postMessage({ command: 'tagsResult', result });
                 } catch (err) {
-                    webviewView.webview.postMessage({ command: 'formResult', error: String(err) });
+                    webviewView.webview.postMessage({ command: 'tagsResult', error: String(err) });
                 }
             }
         });

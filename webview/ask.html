@@ -9,6 +9,7 @@
         .subtle-section {
             padding: 5px 0;
         }
+
         input[type="submit"] {
             background: var(--vscode-button-background);
             color: var(--vscode-button-foreground);
@@ -17,16 +18,20 @@
             font-family: var(--vscode-font-family);
             cursor: pointer;
         }
-        select, input[type="text"] {
+
+        select,
+        input[type="text"] {
             background: var(--vscode-dropdown-background);
             color: var(--vscode-dropdown-foreground);
             border: 1px solid var(--vscode-dropdown-border);
             padding: 3px 6px;
             font-family: var(--vscode-font-family);
         }
+
         button {
             background: var(--vscode-button-background);
         }
+
         textarea {
             background-color: var(--vscode-editor-background);
             color: var(--vscode-editor-foreground);
@@ -39,11 +44,8 @@
 
 <body>
     <p>AI Host: {{aiHost}}</p>
-    <select>
-        <option value="a">Value1</option>
-        <option value="b">Value2</option>
-    </select>
-    
+    <select id="model_select"></select>
+
     <div class="subtle-section">
         <h2>Ask</h2>
         <form id="ask_form">
@@ -56,14 +58,24 @@
         <label for="answer">Answer</label>
         <textarea id="answer" readonly></textarea>
     </div>
+
     <script>
         const vscode = acquireVsCodeApi();
-        document.getElementById('ask_form').addEventListener('submit', (e) => {
-            e.preventDefault();
-            const question = e.target.question_textarea.value;
-            vscode.postMessage({ command: 'submitForm', payload: { question } });
+
+        window.addEventListener('message', ({ data }) => {
+            if (data.command === 'tagsResult') {
+                const select = document.getElementById('model_select');
+                data.result.models.forEach(m => {
+                    const opt = document.createElement('option');
+                    opt.value = opt.textContent = m.name;
+                    select.appendChild(opt);
+                });
+            }
         });
+        vscode.postMessage({ command: 'getTags' });
+
     </script>
+
 </body>
 
 </html>
